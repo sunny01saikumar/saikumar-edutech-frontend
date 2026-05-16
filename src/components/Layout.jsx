@@ -1,23 +1,29 @@
-import {
-    Outlet
-} from "react-router-dom";
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
 
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
 function Layout() {
 
+    const [open,setOpen] = useState(false);
+
     return (
 
         <div className="app-layout">
 
-            <Sidebar />
+            <Sidebar
+                open={open}
+                setOpen={setOpen}
+            />
 
             <div className="main-content">
 
-                <Navbar />
+                <Navbar
+                    setOpen={setOpen}
+                />
 
-                <Outlet />
+                <Outlet/>
 
             </div>
 

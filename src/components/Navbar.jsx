@@ -1,18 +1,28 @@
-function Navbar() {
+import { FaBars } from "react-icons/fa";
+
+function Navbar({setOpen}) {
 
     return (
 
         <div className="navbar">
 
-            <div className="nav-title">
+            <button
+                className="menu-btn"
+                onClick={()=>setOpen(prev=>!prev)}
+            >
+                <FaBars/>
+            </button>
+
+            <h1 className="nav-title">
                 Saikumar EduTech
-            </div>
+            </h1>
 
             <div className="nav-user">
                 Welcome Admin
             </div>
 
         </div>
+
     );
 }
 
