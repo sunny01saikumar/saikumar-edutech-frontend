@@ -1,4 +1,56 @@
+import { useEffect, useState } from "react";
+import API from "../services/API";
+
 function Dashboard() {
+
+    const [stats, setStats] = useState({
+
+        totalImages: 0,
+        totalChats: 0,
+        activeUsers: 0
+
+    });
+
+    useEffect(() => {
+
+        loadDashboard();
+
+    }, []);
+
+    const loadDashboard = async () => {
+
+        try {
+
+            const imageResponse =
+                await API.get("/images");
+
+            const chatResponse =
+                await API.get("/chat/conversation");
+
+            const userResponse =
+                await API.get("/users");
+
+            setStats({
+
+                totalImages:
+                    imageResponse.data.length,
+
+                totalChats:
+                    chatResponse.data.length,
+
+                activeUsers:
+                    userResponse.data.length
+
+            });
+
+        }
+        catch(error){
+
+            console.log(error);
+
+        }
+
+    };
 
     return (
 
@@ -8,7 +60,7 @@ function Dashboard() {
 
                 <div className="stat-card blue">
 
-                    <h2>150</h2>
+                    <h2>{stats.totalImages}</h2>
 
                     <p>Total Images</p>
 
@@ -16,7 +68,7 @@ function Dashboard() {
 
                 <div className="stat-card green">
 
-                    <h2>45</h2>
+                    <h2>{stats.totalChats}</h2>
 
                     <p>Total Chats</p>
 
@@ -24,7 +76,7 @@ function Dashboard() {
 
                 <div className="stat-card orange">
 
-                    <h2>12</h2>
+                    <h2>{stats.activeUsers}</h2>
 
                     <p>Active Users</p>
 
@@ -46,6 +98,7 @@ function Dashboard() {
             </div>
 
         </div>
+
     );
 }
 
