@@ -1,187 +1,8 @@
 /* ========================= */
-/* TABLET */
-/* ========================= */
-
-@media (max-width:1024px){
-
-    .sidebar{
-        width:220px;
-    }
-
-    .main-content{
-        margin-left:220px;
-        width:calc(100% - 220px);
-    }
-
-    .navbar{
-        padding:0 20px;
-    }
-
-    .gallery-title,
-    .upload-title,
-    .dashboard-welcome h1{
-        font-size:34px;
-    }
-
-    .chat-users{
-        width:250px;
-    }
-
-}
-
-
-/* ========================= */
-/* MOBILE */
-/* ========================= */
-
-@media (max-width:768px){
-
-    /* sidebar */
-
-    .sidebar{
-        width:70px;
-        overflow:hidden;
-    }
-
-    .logo{
-        font-size:28px;
-        margin-bottom:25px;
-    }
-
-    .sidebar-menu a{
-
-        justify-content:center;
-        padding:14px;
-        font-size:0;
-    }
-
-    .sidebar-menu a svg{
-        font-size:22px;
-    }
-
-    .main-content{
-
-        margin-left:70px;
-
-        width:calc(100% - 70px);
-    }
-
-    /* navbar */
-
-    .navbar{
-
-        height:auto;
-
-        padding:15px;
-
-        flex-direction:column;
-
-        gap:10px;
-
-        text-align:center;
-    }
-
-    .nav-title{
-        font-size:20px;
-    }
-
-    .nav-user{
-        font-size:15px;
-    }
-
-    /* content */
-
-    .content{
-        padding:15px;
-    }
-
-    /* dashboard */
-
-    .dashboard-grid{
-
-        grid-template-columns:1fr;
-
-        gap:15px;
-    }
-
-    .stat-card h2{
-
-        font-size:30px;
-    }
-
-    /* gallery */
-
-    .gallery-title{
-        font-size:36px;
-    }
-
-    .gallery-grid{
-
-        grid-template-columns:1fr;
-    }
-
-    /* upload */
-
-    .upload-container{
-
-        padding:20px;
-    }
-
-    .upload-box{
-
-        height:220px;
-    }
-
-    /* chat */
-
-    .chat-page{
-
-        flex-direction:column;
-
-        height:auto;
-    }
-
-    .chat-users{
-
-        width:100%;
-
-        height:200px;
-    }
-
-    .chat-box{
-
-        height:70vh;
-    }
-
-    /* login */
-
-    .login-left{
-        display:none;
-    }
-
-    .login-right{
-
-        width:100%;
-    }
-
-    .login-title{
-        font-size:32px;
-    }
-
-    /* register */
-
-    .register-heading{
-        font-size:34px;
-    }
-
-}
-
-
-/* ========================= */
 /* LARGE MONITORS */
 /* ========================= */
 
-@media(min-width:1600px){
+@media (min-width:1600px){
 
     .content{
         max-width:1600px;
@@ -189,12 +10,16 @@
     }
 
     .dashboard-grid{
-
-        grid-template-columns:
-        repeat(4,1fr);
+        grid-template-columns:repeat(4,1fr);
     }
+}
 
-    .menu-btn{
+
+/* ========================= */
+/* MENU BUTTON */
+/* ========================= */
+
+.menu-btn{
 
     display:none;
 
@@ -207,6 +32,11 @@
     cursor:pointer;
 }
 
+
+/* ========================= */
+/* MOBILE SIDEBAR */
+/* ========================= */
+
 @media(max-width:768px){
 
     .menu-btn{
@@ -216,23 +46,16 @@
     .sidebar{
 
         left:-260px;
-
         transition:.3s;
-
         z-index:1000;
     }
 
     .sidebar.open{
-
         left:0;
     }
 
     .main-content{
-
         margin-left:0;
-
         width:100%;
     }
-
-}
 }
