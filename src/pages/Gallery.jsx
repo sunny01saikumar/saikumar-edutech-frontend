@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import API from "../api/axios";
 
 function Gallery() {
@@ -22,10 +21,13 @@ function Gallery() {
 
             setImages(response.data);
 
-        } catch (error) {
+        }
+        catch (error) {
 
             console.error(error);
+
         }
+
     };
 
     return (
@@ -52,39 +54,45 @@ function Gallery() {
 
                 <div className="gallery-grid">
 
-                    {images.map((img) => (
+                    {
 
-                        <div
-                            key={img.id}
-                            className="gallery-card"
-                        >
+                        images.map((img) => (
 
-                            <img
-                                src={`http://localhost:8080/uploads/${img.fileName}`}
-                                alt=""
-                                className="gallery-image"
-                            />
+                            <div
+                                key={img.id}
+                                className="gallery-card"
+                            >
 
-                            <div className="gallery-content">
+                                <img
+                                    src={`https://saikumar-edutech-backend-1.onrender.com${img.filePath}`}
+                                    alt={img.description}
+                                    className="gallery-image"
+                                />
 
-                                <p className="gallery-description">
+                                <div className="gallery-content">
 
-                                    {img.description}
+                                    <p className="gallery-description">
 
-                                </p>
+                                        {img.description}
+
+                                    </p>
+
+                                </div>
 
                             </div>
 
-                        </div>
+                        ))
 
-                    ))}
+                    }
 
                 </div>
 
             </div>
 
         </div>
+
     );
+
 }
 
 export default Gallery;
