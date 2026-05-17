@@ -3,46 +3,63 @@ import API from "../api/axios";
 
 function Chat() {
 
-    const [users,setUsers] = useState([]);
-    const [selectedUser,setSelectedUser] = useState(null);
+    const [users, setUsers] = useState([]);
 
-    const [messages,setMessages] = useState([]);
-    const [message,setMessage] = useState("");
+    const [selectedUser,
+        setSelectedUser] =
+        useState(null);
+
+    const [messages,
+        setMessages] =
+        useState([]);
+
+    const [message,
+        setMessage] =
+        useState("");
+
+
 
     const currentUser =
         JSON.parse(
-            localStorage.getItem("user")
-        ) || {};
+            localStorage.getItem(
+                "user"
+            ) || "{}"
+        );
 
 
-    useEffect(()=>{
+
+    useEffect(() => {
 
         loadUsers();
 
-    },[]);
+    }, []);
 
 
 
     /*
-      LOAD USERS
+        LOAD USERS
     */
 
-    const loadUsers = async()=>{
+    const loadUsers = async () => {
 
-        try{
+        try {
 
             const response =
                 await API.get(
                     "/users"
                 );
 
+            console.log(
+                response.data
+            );
+
             const filteredUsers =
                 response.data.filter(
 
-                    user=>
+                    user =>
 
                     user.id !==
-                    currentUser.id
+                    currentUser?.id
 
                 );
 
@@ -51,10 +68,9 @@ function Chat() {
             );
 
         }
-        catch(error){
+        catch (error) {
 
             console.log(
-                "Users error",
                 error
             );
 
@@ -65,32 +81,33 @@ function Chat() {
 
 
     /*
-      OPEN CHAT
+        OPEN CHAT
     */
 
-    const openChat = async(user)=>{
+    const openChat =
+        async (user) => {
 
-        setSelectedUser(user);
+        setSelectedUser(
+            user
+        );
 
-        try{
+        try {
 
             const response =
-
-            await API.get(
+                await API.get(
 
 `/chat/conversation?user1=${currentUser.id}&user2=${user.id}`
 
-            );
+                );
 
             setMessages(
                 response.data
             );
 
         }
-        catch(error){
+        catch (error) {
 
             console.log(
-                "Conversation error",
                 error
             );
 
@@ -103,54 +120,57 @@ function Chat() {
 
 
     /*
-      SEND MESSAGE
+        SEND MESSAGE
     */
 
-    const sendMessage = async()=>{
+    const sendMessage =
+        async () => {
 
-        if(
+        if (
             !message.trim()
         ) return;
 
-        try{
+
+        try {
 
             const response =
+                await API.post(
+                    "/chat/send",
+                    {
 
-            await API.post(
-                "/chat/send",
-                {
+                        senderId:
+                            currentUser.id,
 
-                    senderId:
-                    currentUser.id,
+                        receiverId:
+                            selectedUser.id,
 
-                    receiverId:
-                    selectedUser.id,
+                        message:
+                            message
 
-                    message:
-                    message
+                    }
+                );
 
-                }
-            );
 
-            setMessages(prev=>
-
-                [
+            setMessages(
+                prev => [
 
                     ...prev,
 
                     response.data
 
                 ]
-
             );
 
-            setMessage("");
+
+            setMessage(
+                ""
+            );
+
 
         }
-        catch(error){
+        catch (error) {
 
             console.log(
-                "Send Error",
                 error
             );
 
@@ -160,39 +180,70 @@ function Chat() {
 
 
 
-    return(
+    return (
 
-        <div className="chat-page">
+        <div
+            className="chat-page"
+        >
 
 
-            {/* LEFT USERS */}
+            {/* USERS PANEL */}
 
 
-            <div className="chat-users">
+            <div
+                className="chat-users"
+            >
 
                 <h2>
-                    Messages
+
+                    Chats
+
                 </h2>
+
 
                 {
 
-                    users.map(user=>(
+                    users.length === 0
+
+                    ?
+
+                    <p>
+
+                        No Users
+
+                    </p>
+
+                    :
+
+                    users.map(
+
+                        user => (
 
                         <div
 
-                            key={user.id}
+                            key={
+                                user.id
+                            }
 
-                            className={`user-item
-                            ${
-                            selectedUser?.id===user.id
-                            ?
-                            "active-user"
-                            :
-                            ""
+                            className={`user-item ${
+                                selectedUser?.id
+                                ===
+                                user.id
+
+                                ?
+
+                                "active-user"
+
+                                :
+
+                                ""
                             }`}
 
-                            onClick={()=>
-                            openChat(user)}
+                            onClick={() =>
+                                openChat(
+                                    user
+                                )
+                            }
 
                         >
 
@@ -200,24 +251,34 @@ function Chat() {
                             className="user-avatar">
 
                             {
-                            user.userName
-                            ?.charAt(0)
-                            ?.toUpperCase()
+
+                            (
+                                user.userName ||
+
+                                user.username ||
+
+                                "U"
+                            )
+
+                            .charAt(0)
+
+                            .toUpperCase()
+
                             }
 
                             </div>
 
 
-                            <div>
+                            <div
+                            className="user-name">
 
-                                <div
-                                className="user-name">
+                            {
 
-                                {
-                                user.userName
-                                }
+                            user.userName ||
 
-                                </div>
+                            user.username
+
+                            }
 
                             </div>
 
@@ -231,110 +292,138 @@ function Chat() {
 
 
 
-            {/* RIGHT CHAT */}
+
+
+            {/* CHAT SECTION */}
 
 
 
-            <div className="chat-box">
+            <div
+                className="chat-box"
+            >
 
 
                 <div
-                className="chat-header">
+                    className="chat-header"
+                >
 
                     {
 
-                    selectedUser ?
+                        selectedUser
 
-                    <>
+                        ?
+
+                        <>
+
+                        <div
+                        className="user-avatar">
+
+                        {
+
+                        (
+                        selectedUser.userName ||
+
+                        selectedUser.username
+
+                        )
+
+                        .charAt(0)
+
+                        .toUpperCase()
+
+                        }
+
+                        </div>
+
+                        <span>
+
+                        {
+
+                        selectedUser.userName ||
+
+                        selectedUser.username
+
+                        }
+
+                        </span>
+
+                        </>
+
+                        :
+
+                        "Select User To Start Chat"
+
+                    }
+
+                </div>
+
+
+
+
+                <div
+                className="chat-messages"
+                >
+
+
+                {
+
+                    messages.length===0
+
+                    &&
+
+                    selectedUser
+
+                    &&
 
                     <div
-                    className="user-avatar">
+                    className="empty-chat">
+
+                    Start conversation 👋
+
+                    </div>
+
+                }
+
+
+
+                {
+
+                    messages.map(
+                    (msg,index)=>(
+
+                    <div
+
+                    key={index}
+
+                    className={
+
+                    msg.senderId ===
+                    currentUser.id
+
+                    ?
+
+                    "message-right"
+
+                    :
+
+                    "message-left"
+
+                    }
+
+                    >
 
                     {
-                    selectedUser
-                    .userName
-                    ?.charAt(0)
-                    ?.toUpperCase()
+
+                    msg.message
+
                     }
 
                     </div>
 
-                    <span>
-
-                    {
-                    selectedUser
-                    .userName
-                    }
-
-                    </span>
-
-                    </>
-
-                    :
-
-                    "Select User"
-
-                    }
-
-                </div>
-
-
-
-                <div
-                className="chat-messages">
-
-                {
-
-                messages.length===0
-                &&
-                selectedUser &&
-
-                <div
-                className="empty-chat">
-
-                Say hi 👋
-
-                </div>
-
-                }
-
-
-
-                {
-
-                messages.map(
-                (msg,index)=>(
-
-                <div
-
-                key={index}
-
-                className={
-
-                msg.senderId===
-                currentUser.id
-
-                ?
-
-                "message-right"
-
-                :
-
-                "message-left"
-
-                }
-
-                >
-
-                {
-                msg.message
-                }
-
-                </div>
-
                 ))
 
                 }
+
 
                 </div>
 
@@ -352,9 +441,9 @@ function Chat() {
 
                 className="chat-input"
 
-                value={message}
+                placeholder="Type message..."
 
-                placeholder="Message..."
+                value={message}
 
                 onChange={(e)=>
 
@@ -367,10 +456,10 @@ function Chat() {
                 onKeyDown={(e)=>{
 
                     if(
-                    e.key==="Enter"
+                        e.key==="Enter"
                     ){
 
-                    sendMessage();
+                        sendMessage();
 
                     }
 
@@ -384,7 +473,7 @@ function Chat() {
                 className="send-btn"
 
                 onClick={
-                sendMessage
+                    sendMessage
                 }
 
                 >
