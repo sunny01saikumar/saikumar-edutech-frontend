@@ -565,3 +565,10 @@ body{
     }
 
 }
+
+.sidebar-menu .active{
+
+    background:#2563eb;
+
+    color:white;
+}
