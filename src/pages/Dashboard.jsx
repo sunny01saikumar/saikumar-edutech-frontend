@@ -5,21 +5,23 @@ function Dashboard() {
 
     const [stats, setStats] = useState({
 
-        totalImages: 0,
-        totalChats: 0,
-        activeUsers: 0
+        totalImages:0,
+        totalChats:0,
+        activeUsers:0
 
     });
 
-    useEffect(() => {
+    const [users,setUsers] = useState([]);
+
+    useEffect(()=>{
 
         loadDashboard();
 
-    }, []);
+    },[]);
 
-    const loadDashboard = async () => {
+    const loadDashboard = async()=>{
 
-        try {
+        try{
 
             const imageResponse =
                 await API.get("/images");
@@ -29,6 +31,7 @@ function Dashboard() {
 
             const userResponse =
                 await API.get("/users");
+
 
             setStats({
 
@@ -40,8 +43,11 @@ function Dashboard() {
 
                 activeUsers:
                     userResponse.data.length
-
             });
+
+            setUsers(
+                userResponse.data
+            );
 
         }
         catch(error){
@@ -49,18 +55,21 @@ function Dashboard() {
             console.log(error);
 
         }
-
     };
 
-    return (
+    return(
 
         <div className="content">
+
+            {/* cards */}
 
             <div className="dashboard-grid">
 
                 <div className="stat-card blue">
 
-                    <h2>{stats.totalImages}</h2>
+                    <h2>
+                        {stats.totalImages}
+                    </h2>
 
                     <p>Total Images</p>
 
@@ -68,7 +77,9 @@ function Dashboard() {
 
                 <div className="stat-card green">
 
-                    <h2>{stats.totalChats}</h2>
+                    <h2>
+                        {stats.totalChats}
+                    </h2>
 
                     <p>Total Chats</p>
 
@@ -76,13 +87,16 @@ function Dashboard() {
 
                 <div className="stat-card orange">
 
-                    <h2>{stats.activeUsers}</h2>
+                    <h2>
+                        {stats.activeUsers}
+                    </h2>
 
                     <p>Active Users</p>
 
                 </div>
 
             </div>
+
 
             <div className="dashboard-welcome">
 
@@ -92,14 +106,49 @@ function Dashboard() {
 
                 <p>
                     Build your social platform with
-                    Java + Spring Boot + React.
+                    Java + Spring Boot + React
                 </p>
+
+            </div>
+
+
+            {/* USERS */}
+
+            <div className="users-container">
+
+                <h2>
+                    Registered Users
+                </h2>
+
+                <div className="users-grid">
+
+                    {users.map(user=>(
+
+                        <div
+                            key={user.id}
+                            className="user-card"
+                        >
+
+                            <h3>
+                                {user.username}
+                            </h3>
+
+                            <p>
+                                {user.email}
+                            </p>
+
+                        </div>
+
+                    ))}
+
+                </div>
 
             </div>
 
         </div>
 
     );
+
 }
 
 export default Dashboard;

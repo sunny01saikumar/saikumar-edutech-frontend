@@ -811,3 +811,85 @@ body{
     }
 
 }
+
+.users-container{
+
+    margin-top:30px;
+}
+
+.users-container h2{
+
+    margin-bottom:20px;
+
+    font-size:28px;
+}
+
+.users-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:20px;
+}
+
+.user-card{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,.08);
+
+    transition:.3s;
+}
+
+.user-card:hover{
+
+    transform:translateY(-5px);
+}
+
+.user-card h3{
+
+    margin-bottom:10px;
+
+    color:#0f172a;
+}
+
+.user-card p{
+
+    color:#64748b;
+}
+
+.user-item{
+
+    padding:15px;
+
+    background:white;
+
+    border-radius:12px;
+
+    margin-bottom:10px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.user-item:hover{
+
+    background:#2563eb;
+
+    color:white;
+}
+
+.user-name{
+
+    font-size:16px;
+
+    font-weight:600;
+}
