@@ -1,10 +1,21 @@
-function Sidebar({open}){
+function Sidebar({ open, setOpen }) {
 
-    return(
+    return (
 
-        <div className={`sidebar ${open ? "open":""}`}>
+        <div className={`sidebar ${open ? "open" : ""}`}>
 
-            {/* existing sidebar code */}
+            <button
+                className="close-btn"
+                onClick={() => setOpen(false)}
+            >
+                ✕
+            </button>
+
+            <div className="logo">
+                SAI
+            </div>
+
+            {/* sidebar menu */}
 
         </div>
 
