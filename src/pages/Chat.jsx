@@ -3,9 +3,6 @@ import API from "../api/axios";
 
 function Chat() {
 
-    const [currentUser,setCurrentUser] =
-        useState(null);
-
     const [users,setUsers] =
         useState([]);
 
@@ -18,41 +15,22 @@ function Chat() {
     const [message,setMessage] =
         useState("");
 
+    const [currentUser,setCurrentUser] =
+        useState(null);
+
 
 
     useEffect(()=>{
 
         loadCurrentUser();
+        loadUsers();
 
     },[]);
 
 
 
-    useEffect(()=>{
-
-        if(currentUser){
-
-            loadUsers();
-
-        }
-
-    },[currentUser]);
-
-
-
-    useEffect(()=>{
-
-        if(selectedUser){
-
-            loadConversation();
-
-        }
-
-    },[selectedUser]);
-
-
-
-    const loadCurrentUser = async()=>{
+    const loadCurrentUser =
+    async()=>{
 
         try{
 
@@ -65,8 +43,7 @@ function Chat() {
                 response.data
             );
 
-        }
-        catch(error){
+        }catch(error){
 
             console.log(error);
 
@@ -76,7 +53,9 @@ function Chat() {
 
 
 
-    const loadUsers = async()=>{
+
+    const loadUsers =
+    async()=>{
 
         try{
 
@@ -86,16 +65,10 @@ function Chat() {
                 );
 
             setUsers(
-
-                response.data.filter(
-                    user =>
-                    user.id !== currentUser.id
-                )
-
+                response.data
             );
 
-        }
-        catch(error){
+        }catch(error){
 
             console.log(error);
 
@@ -105,15 +78,22 @@ function Chat() {
 
 
 
-    const loadConversation =
-    async()=>{
+
+    const selectUser =
+    async(user)=>{
+
+        setSelectedUser(
+            user
+        );
+
+        if(!currentUser) return;
 
         try{
 
             const response =
                 await API.get(
 
-`/chat/conversation?user1=${currentUser.id}&user2=${selectedUser.id}`
+`/chat/conversation?user1=${currentUser.id}&user2=${user.id}`
 
                 );
 
@@ -121,14 +101,14 @@ function Chat() {
                 response.data
             );
 
-        }
-        catch(error){
+        }catch(error){
 
             console.log(error);
 
         }
 
     };
+
 
 
 
@@ -137,12 +117,18 @@ function Chat() {
 
         if(
             !message.trim()
-        ) return;
+            ||
+            !selectedUser
+        )
+        return;
+
 
         try{
 
             await API.post(
+
                 "/chat/send",
+
                 {
 
                     senderId:
@@ -153,14 +139,29 @@ function Chat() {
 
                     content:
                     message
+
                 }
+
             );
+
 
             setMessage("");
 
-            loadConversation();
+
+            const response =
+                await API.get(
+
+`/chat/conversation?user1=${currentUser.id}&user2=${selectedUser.id}`
+
+                );
+
+
+            setMessages(
+                response.data
+            );
 
         }
+
         catch(error){
 
             console.log(error);
@@ -176,192 +177,186 @@ function Chat() {
 <div className="chat-page">
 
 
-<div className="chat-users">
+    {/* LEFT SIDE */}
 
-<h2>Messages</h2>
+    <div className="chat-users">
 
-{
+        <h2>Messages</h2>
 
-users.map(user=>(
 
-<div
-key={user.id}
+        {
 
-className={`user-item ${
-selectedUser?.id===user.id
-?
-"active-user"
-:
-""
-}`}
+        users.map(user=>(
 
-onClick={()=>
-setSelectedUser(user)
-}
->
+        <div
 
-<div
-className="user-avatar"
->
+            key={user.id}
 
-{
-user.username
-?.charAt(0)
-.toUpperCase()
-}
+            className={`user-item ${
+                selectedUser?.id===user.id
+                ?
+                "active-user"
+                :
+                ""
+            }`}
 
-</div>
+            onClick={()=>
+                selectUser(user)
+            }
 
-<div>
+        >
 
-<div
-className="user-name"
->
+        <div
+        className="user-avatar"
+        >
 
-{user.username}
+        {
 
-</div>
+        user.username
+        ?.charAt(0)
+        .toUpperCase()
 
-</div>
+        }
 
-</div>
+        </div>
 
-))
 
-}
+        <div>
 
-</div>
+        <div
+        className="user-name"
+        >
 
+        {user.username}
 
+        </div>
 
+        </div>
 
-<div className="chat-box">
+        </div>
 
+        ))
 
-<div
-className="chat-header"
->
+        }
 
-{
+    </div>
 
-selectedUser ?
 
-<>
 
-<div
-className="user-avatar"
->
 
-{
-selectedUser.username
-.charAt(0)
-.toUpperCase()
-}
+    {/* RIGHT SIDE */}
 
-</div>
 
-{selectedUser.username}
+    <div className="chat-box">
 
-</>
 
-:
+        <div
+        className="chat-header"
+        >
 
-"Select User"
+        {
 
-}
+        selectedUser
 
-</div>
+        ?
 
+        selectedUser.username
 
+        :
 
-<div
-className="chat-messages"
->
+        "Select User"
 
-{
+        }
 
-messages.map(msg=>(
+        </div>
 
-<div
 
-key={msg.id}
 
-className={
+        <div
+        className="chat-messages"
+        >
 
-msg.senderId
-===
-currentUser?.id
+        {
 
-?
+        messages.map(msg=>(
 
-"message-right"
+        <div
 
-:
+        key={msg.id}
 
-"message-left"
+        className={
 
-}
+        msg.senderId
+        ===
+        currentUser?.id
 
->
+        ?
 
-{msg.content}
+        "message-right"
 
-</div>
+        :
 
-))
+        "message-left"
 
-}
+        }
 
-</div>
+        >
 
+        {msg.content}
 
+        </div>
 
-{
+        ))
 
-selectedUser &&
+        }
 
-<div
-className="chat-input-box"
->
+        </div>
 
-<input
 
-className="chat-input"
 
-placeholder="Message..."
+        {
 
-value={message}
+        selectedUser &&
 
-onChange={(e)=>
+        <div
+        className="chat-input-box"
+        >
 
-setMessage(
-e.target.value
-)
+        <input
 
-}
+        className="chat-input"
 
-/>
+        value={message}
 
-<button
+        placeholder="Type message..."
 
-className="send-btn"
+        onChange={(e)=>
+            setMessage(
+                e.target.value
+            )
+        }
 
-onClick={
-sendMessage
-}
+        />
 
->
+        <button
 
-Send
+        className="send-btn"
 
-</button>
+        onClick={
+            sendMessage
+        }
 
-</div>
+        >
 
-}
+        Send
 
+        </button>
 
-</div>
+        </div>
+
+        }
+
+    </div>
 
 </div>
 
