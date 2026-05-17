@@ -24,7 +24,7 @@ function Gallery() {
         }
         catch (error) {
 
-            console.error(error);
+            console.log(error);
 
         }
 
@@ -36,27 +36,11 @@ function Gallery() {
 
             <div className="gallery-container">
 
-                <div className="gallery-header">
-
-                    <div>
-
-                        <h1 className="gallery-title">
-                            Gallery
-                        </h1>
-
-                        <p className="gallery-subtitle">
-                            Explore uploaded images
-                        </p>
-
-                    </div>
-
-                </div>
-
                 <div className="gallery-grid">
 
                     {
 
-                        images.map((img) => (
+                        images.map((img)=>(
 
                             <div
                                 key={img.id}
@@ -64,14 +48,16 @@ function Gallery() {
                             >
 
                                 <img
-                                    src={`https://saikumar-edutech-backend-1.onrender.com${img.filePath}`}
+                                    src={`https://saikumar-edutech-backend-1.onrender.com/${img.filePath}`}
                                     alt={img.description}
                                     className="gallery-image"
                                 />
 
-                                <div className="gallery-content">
+                                <div
+                                    className="gallery-content"
+                                >
 
-                                    <p className="gallery-description">
+                                    <p>
 
                                         {img.description}
 
