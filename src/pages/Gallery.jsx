@@ -1,76 +1,139 @@
-import {useEffect,useState} from "react";
+import { useEffect, useState } from "react";
 import API from "../api/axios";
 
-function Gallery(){
+function Gallery() {
 
-const [images,setImages]=
-useState([]);
+    const [images, setImages] =
+        useState([]);
 
-useEffect(()=>{
+    useEffect(() => {
 
-fetchImages();
+        fetchImages();
 
-},[]);
+    }, []);
+
+    const fetchImages = async () => {
+
+        try {
+
+            const response =
+                await API.get(
+                    "/images"
+                );
+
+            setImages(
+                response.data
+            );
+
+        } catch (error) {
+
+            console.log(
+                error
+            );
+
+        }
+
+    };
+
+    return (
+
+        <div className="content">
+
+            <div className="gallery-container">
+
+                <div className="gallery-header">
+
+                    <div>
+
+                        <h1
+                            className="gallery-title"
+                        >
+
+                            Gallery
+
+                        </h1>
+
+                        <p
+                            className="gallery-subtitle"
+                        >
+
+                            Explore uploaded images
+
+                        </p>
+
+                    </div>
+
+                </div>
 
 
-const fetchImages=async()=>{
+                <div
+                    className="gallery-grid"
+                >
 
-try{
+                    {
 
-const response=
-await API.get("/images");
+                        images.length > 0 ?
 
-setImages(response.data);
+                        images.map(img => (
 
-}
-catch(error){
+                            <div
+                                key={img.id}
+                                className="gallery-card"
+                            >
 
-console.log(error);
+                                <img
+                                    src={img.image}
+                                    alt={
+                                        img.originalName
+                                    }
+                                    className="gallery-image"
+                                />
 
-}
+                                <div
+                                    className="gallery-content"
+                                >
 
-};
+                                    <h4>
 
-return(
+                                        Uploaded by:
 
-<div className="gallery-grid">
+                                        {" "}
 
-{
+                                        {img.uploadedBy}
 
-images.map(img=>(
+                                    </h4>
 
-<div
-key={img.id}
-className="gallery-card"
->
+                                    <p
+                                        className="gallery-description"
+                                    >
 
-<img
-src={img.image}
-alt=""
-className="gallery-image"
-/>
+                                        {img.description}
 
-<h4>
+                                    </p>
 
-{img.uploadedBy}
+                                </div>
 
-</h4>
+                            </div>
 
-<p>
+                        ))
 
-{img.description}
+                        :
 
-</p>
+                        <h3>
 
-</div>
+                            No Images Found
 
-))
+                        </h3>
 
-}
+                    }
 
-</div>
+                </div>
 
-);
+            </div>
+
+        </div>
+
+    );
 
 }
 
