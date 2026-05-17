@@ -3,41 +3,48 @@ import API from "../api/axios";
 
 function Chat() {
 
-    const [users,setUsers] = useState([]);
-    const [selectedUser,setSelectedUser] = useState(null);
+    const [users, setUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
 
-    const [message,setMessage] = useState("");
-    const [messages,setMessages] = useState([]);
+    const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState([]);
 
-    useEffect(()=>{
+    const currentUser =
+        JSON.parse(
+            localStorage.getItem("user")
+        );
+
+    useEffect(() => {
 
         loadUsers();
 
-    },[]);
+    }, []);
 
 
-    const loadUsers = async()=>{
+    /*
+      LOAD USERS
+    */
 
-        try{
+    const loadUsers = async () => {
+
+        try {
 
             const response =
                 await API.get("/users");
 
-            const currentUser =
-                JSON.parse(
-                    localStorage.getItem("user")
-                );
-
-            setUsers(
-
-                response.data.filter(
-                    user =>
-                    user.id !== currentUser.id
-                )
-
+            console.log(
+                response.data
             );
 
-        }catch(error){
+            const filteredUsers =
+                response.data.filter(
+                    user =>
+                        user.id !== currentUser.id
+                );
+
+            setUsers(filteredUsers);
+
+        } catch (error) {
 
             console.log(error);
 
@@ -46,29 +53,84 @@ function Chat() {
     };
 
 
-    const sendMessage=()=>{
+    /*
+      OPEN CHAT
+    */
 
-        if(!message.trim()) return;
+    const openChat = async (user) => {
 
-        setMessages(prev=>[
-            ...prev,
-            {
-                text:message,
-                mine:true
-            }
-        ]);
+        setSelectedUser(user);
 
-        setMessage("");
+        try {
+
+            const response =
+                await API.get(
+                    `/chat/conversation?user1=${currentUser.id}&user2=${user.id}`
+                );
+
+            setMessages(
+                response.data
+            );
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
 
     };
 
 
+    /*
+      SEND MESSAGE
+    */
 
-    return(
+    const sendMessage = async () => {
+
+        if (!message.trim())
+            return;
+
+        try {
+
+            const response =
+                await API.post(
+                    "/chat/send",
+                    {
+                        senderId:
+                            currentUser.id,
+
+                        receiverId:
+                            selectedUser.id,
+
+                        message:
+                            message
+                    }
+                );
+
+            setMessages(prev => [
+
+                ...prev,
+
+                response.data
+
+            ]);
+
+            setMessage("");
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    };
+
+
+    return (
 
         <div className="chat-page">
 
-            {/* LEFT USERS */}
+            {/* USERS */}
 
             <div className="chat-users">
 
@@ -76,29 +138,41 @@ function Chat() {
 
                 {
 
-                    users.map(user=>(
+                    users.map(user => (
 
                         <div
                             key={user.id}
-                            className="user-item"
-                            onClick={()=>
-                                setSelectedUser(user)
+
+                            className={`user-item ${
+                                selectedUser?.id === user.id
+                                ? "active-user"
+                                : ""
+                            }`}
+
+                            onClick={() =>
+                                openChat(user)
                             }
                         >
 
-                            <div className="user-avatar">
+                            <div
+                                className="user-avatar"
+                            >
 
-                                {user.username
-                                    .charAt(0)
-                                    .toUpperCase()}
+                                {
+                                    user.userName
+                                    ?.charAt(0)
+                                    ?.toUpperCase()
+                                }
 
                             </div>
 
                             <div>
 
-                                <div className="user-name">
+                                <div
+                                    className="user-name"
+                                >
 
-                                    {user.username}
+                                    {user.userName}
 
                                 </div>
 
@@ -114,12 +188,13 @@ function Chat() {
 
 
 
-            {/* RIGHT CHAT */}
+            {/* CHAT BOX */}
 
             <div className="chat-box">
 
-
-                <div className="chat-header">
+                <div
+                    className="chat-header"
+                >
 
                     {
 
@@ -131,13 +206,23 @@ function Chat() {
                                 className="user-avatar"
                             >
 
-                            {selectedUser.username
-                                .charAt(0)
-                                .toUpperCase()}
+                                {
+                                    selectedUser
+                                    .userName
+                                    ?.charAt(0)
+                                    ?.toUpperCase()
+                                }
 
                             </div>
 
-                            {selectedUser.username}
+                            <span>
+
+                                {
+                                    selectedUser
+                                    .userName
+                                }
+
+                            </span>
 
                         </>
 
@@ -151,25 +236,57 @@ function Chat() {
 
 
 
-                <div className="chat-messages">
+                <div
+                    className="chat-messages"
+                >
 
                     {
 
-                        messages.map((msg,index)=>(
+                        messages.length === 0
+                        && selectedUser &&
+
+                        <div
+                            style={{
+                                textAlign:"center",
+                                color:"#64748b",
+                                marginTop:"30px"
+                            }}
+                        >
+
+                            Start conversation
+
+                        </div>
+
+                    }
+
+
+                    {
+
+                        messages.map(
+                            (msg,index)=>(
 
                             <div
                                 key={index}
 
                                 className={
-                                    msg.mine
+
+                                    msg.senderId ===
+                                    currentUser.id
+
                                     ?
+
                                     "message-right"
+
                                     :
+
                                     "message-left"
+
                                 }
                             >
 
-                                {msg.text}
+                                {
+                                    msg.message
+                                }
 
                             </div>
 
@@ -185,7 +302,9 @@ function Chat() {
 
                     selectedUser &&
 
-                    <div className="chat-input-box">
+                    <div
+                        className="chat-input-box"
+                    >
 
                         <input
 
@@ -200,6 +319,18 @@ function Chat() {
                                     e.target.value
                                 )
                             }
+
+                            onKeyDown={(e)=>{
+
+                                if(
+                                    e.key==="Enter"
+                                ){
+
+                                    sendMessage();
+
+                                }
+
+                            }}
 
                         />
 
