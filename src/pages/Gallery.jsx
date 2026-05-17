@@ -1,83 +1,76 @@
-import { useEffect, useState } from "react";
+import {useEffect,useState} from "react";
 import API from "../api/axios";
 
-function Gallery() {
+function Gallery(){
 
-    const [images, setImages] =
-        useState([]);
+const [images,setImages]=
+useState([]);
 
-    useEffect(() => {
+useEffect(()=>{
 
-        fetchImages();
+fetchImages();
 
-    }, []);
+},[]);
 
-    const fetchImages = async () => {
 
-        try {
+const fetchImages=async()=>{
 
-            const response =
-                await API.get("/images");
+try{
 
-            setImages(response.data);
+const response=
+await API.get("/images");
 
-        }
-        catch (error) {
+setImages(response.data);
 
-            console.log(error);
+}
+catch(error){
 
-        }
+console.log(error);
 
-    };
+}
 
-    return (
+};
 
-        <div className="content">
+return(
 
-            <div className="gallery-container">
+<div className="gallery-grid">
 
-                <div className="gallery-grid">
+{
 
-                    {
+images.map(img=>(
 
-                        images.map((img)=>(
+<div
+key={img.id}
+className="gallery-card"
+>
 
-                            <div
-                                key={img.id}
-                                className="gallery-card"
-                            >
+<img
+src={img.image}
+alt=""
+className="gallery-image"
+/>
 
-                                <img
-                                    src={`https://saikumar-edutech-backend-1.onrender.com/${img.filePath}`}
-                                    alt={img.description}
-                                    className="gallery-image"
-                                />
+<h4>
 
-                                <div
-                                    className="gallery-content"
-                                >
+{img.uploadedBy}
 
-                                    <p>
+</h4>
 
-                                        {img.description}
+<p>
 
-                                    </p>
+{img.description}
 
-                                </div>
+</p>
 
-                            </div>
+</div>
 
-                        ))
+))
 
-                    }
+}
 
-                </div>
+</div>
 
-            </div>
-
-        </div>
-
-    );
+);
 
 }
 
