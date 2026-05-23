@@ -6,7 +6,7 @@ import {
 
 import Login from "./pages/Login";
 
-import Register from "./pages/Register";
+// import Register from "./pages/Register";
 
 import Upload from "./pages/Upload";
 
@@ -34,10 +34,10 @@ function App() {
                     element={<Login />}
                 />
 
-                <Route
+                {/* <Route
                     path="/register"
                     element={<Register />}
-                />
+                /> */}
 
                 {/* APP LAYOUT */}
 

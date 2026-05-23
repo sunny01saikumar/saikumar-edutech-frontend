@@ -4,7 +4,7 @@ import {
     FaHome,
     FaImage,
     FaUpload,
-    FaComments
+    FaBookOpen
 } from "react-icons/fa";
 
 function Sidebar({ open, setOpen }) {
@@ -28,34 +28,34 @@ function Sidebar({ open, setOpen }) {
 
                 <NavLink
                     to="/dashboard"
-                    onClick={()=>setOpen(false)}
+                    onClick={() => setOpen(false)}
                 >
-                    <FaHome/>
+                    <FaHome />
                     <span>Dashboard</span>
                 </NavLink>
 
                 <NavLink
                     to="/feed"
-                    onClick={()=>setOpen(false)}
+                    onClick={() => setOpen(false)}
                 >
-                    <FaImage/>
+                    <FaImage />
                     <span>Feed</span>
                 </NavLink>
 
                 <NavLink
                     to="/upload"
-                    onClick={()=>setOpen(false)}
+                    onClick={() => setOpen(false)}
                 >
-                    <FaUpload/>
+                    <FaUpload />
                     <span>Upload</span>
                 </NavLink>
 
                 <NavLink
-                    to="/chat"
-                    onClick={()=>setOpen(false)}
+                    to="/blogs"
+                    onClick={() => setOpen(false)}
                 >
-                    <FaComments/>
-                    <span>Chat</span>
+                    <FaBookOpen />
+                    <span>Blogs</span>
                 </NavLink>
 
             </div>
