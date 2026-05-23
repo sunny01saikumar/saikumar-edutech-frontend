@@ -3,36 +3,27 @@ import API from "../api/axios";
 
 function Gallery() {
 
-    const [images, setImages] =
-        useState([]);
+    const [images, setImages] = useState([]);
 
     useEffect(() => {
-
         fetchImages();
-
     }, []);
 
     const fetchImages = async () => {
 
         try {
 
-            const response =
-                await API.get(
-                    "/images"
-                );
+            const response = await API.get("/images");
 
-            setImages(
-                response.data
-            );
+            console.log(response.data);
+
+            setImages(response.data);
 
         } catch (error) {
 
-            console.log(
-                error
-            );
+            console.log(error);
 
         }
-
     };
 
     return (
@@ -45,36 +36,24 @@ function Gallery() {
 
                     <div>
 
-                        <h1
-                            className="gallery-title"
-                        >
-
+                        <h1 className="gallery-title">
                             Gallery
-
                         </h1>
 
-                        <p
-                            className="gallery-subtitle"
-                        >
-
+                        <p className="gallery-subtitle">
                             Explore uploaded images
-
                         </p>
 
                     </div>
 
                 </div>
 
-
-                <div
-                    className="gallery-grid"
-                >
+                <div className="gallery-grid">
 
                     {
-
                         images.length > 0 ?
 
-                        images.map(img => (
+                        images.map((img) => (
 
                             <div
                                 key={img.id}
@@ -82,33 +61,19 @@ function Gallery() {
                             >
 
                                 <img
-                                    src={img.image}
-                                    alt={
-                                        img.originalName
-                                    }
+                                    src={img.imageUrl}
+                                    alt={img.originalName}
                                     className="gallery-image"
                                 />
 
-                                <div
-                                    className="gallery-content"
-                                >
+                                <div className="gallery-content">
 
                                     <h4>
-
-                                        Uploaded by:
-
-                                        {" "}
-
-                                        {img.uploadedBy}
-
+                                        Uploaded By: {img.uploadedBy}
                                     </h4>
 
-                                    <p
-                                        className="gallery-description"
-                                    >
-
+                                    <p className="gallery-description">
                                         {img.description}
-
                                     </p>
 
                                 </div>
@@ -119,12 +84,7 @@ function Gallery() {
 
                         :
 
-                        <h3>
-
-                            No Images Found
-
-                        </h3>
-
+                        <h3>No Images Found</h3>
                     }
 
                 </div>
@@ -132,9 +92,7 @@ function Gallery() {
             </div>
 
         </div>
-
     );
-
 }
 
 export default Gallery;
