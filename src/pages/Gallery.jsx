@@ -54,11 +54,17 @@ function Gallery() {
                                     className="gallery-card"
                                 >
 
-                                    <img
-                                        src={img.imageUrl}
-                                        alt={img.originalName}
-                                        className="gallery-image"
-                                    />
+                                    <a
+    href={img.imageUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    <img
+        src={img.imageUrl}
+        alt={img.originalName}
+        className="gallery-image"
+    />
+</a>
 
                                     <div className="gallery-content">
 
