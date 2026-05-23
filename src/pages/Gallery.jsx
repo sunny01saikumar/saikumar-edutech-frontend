@@ -5,15 +5,21 @@ function Gallery() {
 
     const [images, setImages] = useState([]);
 
+    const [selectedImage, setSelectedImage] =
+        useState(null);
+
     useEffect(() => {
+
         fetchImages();
+
     }, []);
 
     const fetchImages = async () => {
 
         try {
 
-            const response = await API.get("/images");
+            const response =
+                await API.get("/images");
 
             setImages(response.data);
 
@@ -26,72 +32,141 @@ function Gallery() {
 
     return (
 
-        <div className="content">
+        <div className="feed-page">
 
-            <div className="gallery-container">
+            {/* FEED HEADER */}
 
-                <div className="gallery-header">
+            <div className="feed-header">
 
-                    <h1 className="gallery-title">
-                        Gallery
-                    </h1>
+                <h1 className="feed-title">
+                    Sai EduTech Feed
+                </h1>
 
-                    <p className="gallery-subtitle">
-                        Explore uploaded images
-                    </p>
+                <p className="feed-subtitle">
+                    Learn • Share • Explore
+                </p>
 
-                </div>
+            </div>
 
-                <div className="gallery-grid">
+            {/* POSTS */}
 
-                    {
-                        images.length > 0 ?
+            <div className="feed-container">
 
-                            images.map((img) => (
+                {
 
-                                <div
-                                    key={img.id}
-                                    className="gallery-card"
-                                >
+                    images.length > 0 ?
 
-                                    <a
-    href={img.imageUrl}
-    target="_blank"
-    rel="noopener noreferrer"
->
-    <img
-        src={img.imageUrl}
-        alt={img.originalName}
-        className="gallery-image"
-    />
-</a>
+                        images.map((img) => (
 
-                                    <div className="gallery-content">
+                            <div
+                                key={img.id}
+                                className="post-card"
+                            >
 
-                                        <h3 className="gallery-user">
+                                {/* TOP USER INFO */}
+
+                                <div className="post-header">
+
+                                    <div className="user-avatar">
+
+                                        {
+                                            img.uploadedBy
+                                                ?.charAt(0)
+                                                ?.toUpperCase()
+                                        }
+
+                                    </div>
+
+                                    <div>
+
+                                        <h3 className="username">
                                             {img.uploadedBy}
                                         </h3>
 
-                                        <p className="gallery-description">
-                                            {img.description}
+                                        <p className="post-time">
+                                            Sai EduTech
                                         </p>
 
                                     </div>
 
                                 </div>
 
-                            ))
+                                {/* IMAGE */}
 
-                            :
+                                <div
+                                    className="post-image-wrapper"
+                                    onClick={() =>
+                                        setSelectedImage(
+                                            img.imageUrl
+                                        )
+                                    }
+                                >
 
-                            <h2>No Images Found</h2>
-                    }
+                                    <img
+                                        src={img.imageUrl}
+                                        alt={img.originalName}
+                                        className="post-image"
+                                    />
 
-                </div>
+                                </div>
+
+                                {/* CONTENT */}
+
+                                <div className="post-content">
+
+                                    <p className="post-description">
+
+                                        {img.description}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        ))
+
+                        :
+
+                        <div className="empty-feed">
+
+                            <h2>
+                                No Posts Yet
+                            </h2>
+
+                        </div>
+
+                }
 
             </div>
 
+            {/* IMAGE MODAL */}
+
+            {
+
+                selectedImage && (
+
+                    <div
+                        className="image-modal"
+                        onClick={() =>
+                            setSelectedImage(null)
+                        }
+                    >
+
+                        <img
+                            src={selectedImage}
+                            alt=""
+                            className="modal-image"
+                        />
+
+                    </div>
+
+                )
+
+            }
+
         </div>
+
     );
 }
 
