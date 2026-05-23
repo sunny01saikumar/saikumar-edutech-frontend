@@ -6,6 +6,9 @@ function Blogs() {
     const [blogs, setBlogs] =
         useState([]);
 
+    const [loading, setLoading] =
+        useState(true);
+
     useEffect(() => {
 
         fetchBlogs();
@@ -19,13 +22,33 @@ function Blogs() {
             const response =
                 await API.get("/blogs");
 
+            console.log(response.data);
+
             setBlogs(response.data);
 
         } catch (error) {
 
             console.log(error);
+
+        } finally {
+
+            setLoading(false);
         }
     };
+
+    if (loading) {
+
+        return (
+
+            <div className="blogs-page">
+
+                <h1 className="blogs-title">
+                    Loading Blogs...
+                </h1>
+
+            </div>
+        );
+    }
 
     return (
 
@@ -34,6 +57,16 @@ function Blogs() {
             <h1 className="blogs-title">
                 Technical Blogs
             </h1>
+
+            {
+
+                blogs.length === 0 && (
+
+                    <h2>
+                        No Blogs Found
+                    </h2>
+                )
+            }
 
             <div className="blogs-container">
 
@@ -53,19 +86,53 @@ function Blogs() {
                         >
 
                             <img
-                                src={blog.image}
-                                alt=""
+                                src={
+                                    blog.image &&
+                                    blog.image.length > 0
+                                        ? blog.image
+                                        : "https://placehold.co/800x400?text=Sai+EduTech"
+                                }
+                                alt={blog.title}
                                 className="blog-image"
                             />
 
                             <div className="blog-content">
 
-                                <h2>
+                                <div className="blog-author">
+
+                                    <div className="blog-avatar">
+
+                                        S
+
+                                    </div>
+
+                                    <div>
+
+                                        <h4>
+                                            Saikumar
+                                        </h4>
+
+                                        <span>
+                                            Sai EduTech
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <h2 className="blog-heading">
+
                                     {blog.title}
+
                                 </h2>
 
-                                <p>
-                                    {blog.description}
+                                <p className="blog-description">
+
+                                    {
+                                        blog.description
+                                            ?.substring(0, 180)
+                                    }...
+
                                 </p>
 
                             </div>
@@ -73,7 +140,6 @@ function Blogs() {
                         </div>
 
                     ))
-
                 }
 
             </div>
