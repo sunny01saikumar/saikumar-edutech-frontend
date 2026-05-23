@@ -12,7 +12,8 @@ import Upload from "./pages/Upload";
 
 import Gallery from "./pages/Gallery";
 
-import Chat from "./pages/Chat";
+// import Chat from "./pages/Chat";
+import Blogs from "./pages/Blogs";
 
 import Dashboard from "./pages/Dashboard";
 
@@ -59,9 +60,14 @@ function App() {
                         element={<Upload />}
                     />
 
-                    <Route
+                    {/* <Route
                         path="/chat"
                         element={<Chat />}
+                    /> */}
+
+                    <Route
+                        path="/blogs"
+                        element={<Blogs />}
                     />
 
                 </Route>
