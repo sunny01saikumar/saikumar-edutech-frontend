@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
+import {
+    FaRegBookmark,
+    FaArrowRight
+} from "react-icons/fa";
 
 function Blogs() {
 
     const [blogs, setBlogs] =
         useState([]);
-
-    const [loading, setLoading] =
-        useState(true);
 
     useEffect(() => {
 
@@ -22,53 +23,34 @@ function Blogs() {
             const response =
                 await API.get("/blogs");
 
-            console.log(response.data);
-
             setBlogs(response.data);
 
-        } catch (error) {
+        }
+        catch (error) {
 
             console.log(error);
-
-        } finally {
-
-            setLoading(false);
         }
     };
-
-    if (loading) {
-
-        return (
-
-            <div className="blogs-page">
-
-                <h1 className="blogs-title">
-                    Loading Blogs...
-                </h1>
-
-            </div>
-        );
-    }
 
     return (
 
         <div className="blogs-page">
 
-            <h1 className="blogs-title">
-                Technical Blogs
-            </h1>
+            <div className="blogs-header">
 
-            {
+                <h1>
+                    Technical Blogs
+                </h1>
 
-                blogs.length === 0 && (
+                <p>
+                    Read Java, Spring Boot,
+                    System Design and Backend
+                    Engineering articles.
+                </p>
 
-                    <h2>
-                        No Blogs Found
-                    </h2>
-                )
-            }
+            </div>
 
-            <div className="blogs-container">
+            <div className="blogs-feed">
 
                 {
 
@@ -85,25 +67,12 @@ function Blogs() {
                             }
                         >
 
-                            <img
-                                src={
-                                    blog.image &&
-                                    blog.image.length > 0
-                                        ? blog.image
-                                        : "https://placehold.co/800x400?text=Sai+EduTech"
-                                }
-                                alt={blog.title}
-                                className="blog-image"
-                            />
-
-                            <div className="blog-content">
+                            <div className="blog-left">
 
                                 <div className="blog-author">
 
-                                    <div className="blog-avatar">
-
+                                    <div className="author-avatar">
                                         S
-
                                     </div>
 
                                     <div>
@@ -120,7 +89,7 @@ function Blogs() {
 
                                 </div>
 
-                                <h2 className="blog-heading">
+                                <h2 className="blog-title">
 
                                     {blog.title}
 
@@ -130,16 +99,49 @@ function Blogs() {
 
                                     {
                                         blog.description
-                                            ?.substring(0, 180)
-                                    }...
+                                    }
 
                                 </p>
+
+                                <div className="blog-footer">
+
+                                    <span>
+                                        {
+                                            blog.publishedDate
+                                        }
+                                    </span>
+
+                                    <div className="blog-actions">
+
+                                        <FaRegBookmark />
+
+                                        <FaArrowRight />
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div className="blog-right">
+
+                                <img
+                                    src={
+                                        blog.image &&
+                                        blog.image !== ""
+                                            ? blog.image
+                                            : "https://placehold.co/600x400?text=Sai+EduTech"
+                                    }
+                                    alt=""
+                                    className="blog-image"
+                                />
 
                             </div>
 
                         </div>
 
                     ))
+
                 }
 
             </div>
