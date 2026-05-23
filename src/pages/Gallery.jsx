@@ -15,8 +15,6 @@ function Gallery() {
 
             const response = await API.get("/images");
 
-            console.log(response.data);
-
             setImages(response.data);
 
         } catch (error) {
@@ -34,17 +32,13 @@ function Gallery() {
 
                 <div className="gallery-header">
 
-                    <div>
+                    <h1 className="gallery-title">
+                        Gallery
+                    </h1>
 
-                        <h1 className="gallery-title">
-                            Gallery
-                        </h1>
-
-                        <p className="gallery-subtitle">
-                            Explore uploaded images
-                        </p>
-
-                    </div>
+                    <p className="gallery-subtitle">
+                        Explore uploaded images
+                    </p>
 
                 </div>
 
@@ -53,38 +47,38 @@ function Gallery() {
                     {
                         images.length > 0 ?
 
-                        images.map((img) => (
+                            images.map((img) => (
 
-                            <div
-                                key={img.id}
-                                className="gallery-card"
-                            >
+                                <div
+                                    key={img.id}
+                                    className="gallery-card"
+                                >
 
-                                <img
-                                    src={img.imageUrl}
-                                    alt={img.originalName}
-                                    className="gallery-image"
-                                />
+                                    <img
+                                        src={img.imageUrl}
+                                        alt={img.originalName}
+                                        className="gallery-image"
+                                    />
 
-                                <div className="gallery-content">
+                                    <div className="gallery-content">
 
-                                    <h4>
-                                        Uploaded By: {img.uploadedBy}
-                                    </h4>
+                                        <h3 className="gallery-user">
+                                            {img.uploadedBy}
+                                        </h3>
 
-                                    <p className="gallery-description">
-                                        {img.description}
-                                    </p>
+                                        <p className="gallery-description">
+                                            {img.description}
+                                        </p>
+
+                                    </div>
 
                                 </div>
 
-                            </div>
+                            ))
 
-                        ))
+                            :
 
-                        :
-
-                        <h3>No Images Found</h3>
+                            <h2>No Images Found</h2>
                     }
 
                 </div>
