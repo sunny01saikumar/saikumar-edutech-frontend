@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-
 import API from "../api/axios";
 
 function Gallery() {
 
-    const [blogs, setBlogs] = useState([]);
+    const [images, setImages] =
+        useState([]);
 
-    const navigate = useNavigate();
+    const [selectedPost, setSelectedPost] =
+        useState(null);
 
     useEffect(() => {
 
-        fetchBlogs();
+        fetchImages();
 
     }, []);
 
-    const fetchBlogs = async () => {
+    const fetchImages = async () => {
 
         try {
 
             const response =
-                await API.get("/blogs");
+                await API.get("/images");
 
-            setBlogs(response.data);
+            setImages(response.data);
 
         } catch (error) {
 
@@ -34,102 +34,79 @@ function Gallery() {
 
     return (
 
-        <div className="medium-feed-page">
+        <div className="feed-page">
 
-            <div className="medium-feed-container">
+            {/* FEED */}
 
-                <div className="medium-profile-header">
-
-                    <h1>
-                        Saikumar
-                    </h1>
-
-                    <div className="medium-tabs">
-
-                        <span className="active-tab">
-                            Home
-                        </span>
-
-                        <span>
-                            Blogs
-                        </span>
-
-                        <span>
-                            About
-                        </span>
-
-                    </div>
-
-                </div>
+            <div className="feed-container">
 
                 {
 
-                    blogs.map((blog) => (
+                    images.map((img) => (
 
                         <div
-                            key={blog.id}
-                            className="medium-post-card"
-                            onClick={() =>
-                                navigate(
-                                    `/blog/${blog.slug}`
-                                )
-                            }
+                            key={img.id}
+                            className="post-card"
                         >
 
-                            <div className="medium-post-left">
+                            {/* USER */}
 
-                                <div className="medium-author">
+                            <div className="post-header">
 
-                                    <div className="medium-avatar">
+                                <div className="user-avatar">
 
-                                        S
-
-                                    </div>
-
-                                    <span>
-
-                                        Saikumar
-
-                                    </span>
-
-                                    <span className="dot">
-
-                                        •
-
-                                    </span>
-
-                                    <span>
-
-                                        {
-                                            new Date(
-                                                blog.createdAt
-                                            ).toDateString()
-                                        }
-
-                                    </span>
+                                    {
+                                        img.uploadedBy
+                                            ?.charAt(0)
+                                            ?.toUpperCase()
+                                    }
 
                                 </div>
 
-                                <h2 className="medium-post-title">
+                                <div>
 
-                                    {blog.title}
+                                    <h3 className="username">
 
-                                </h2>
+                                        {img.uploadedBy}
 
-                                <p className="medium-post-summary">
+                                    </h3>
 
-                                    {blog.summary}
+                                    <p className="post-time">
 
-                                </p>
+                                        Sai EduTech
+
+                                    </p>
+
+                                </div>
 
                             </div>
 
-                            <div className="medium-post-right">
+                            {/* IMAGE */}
+
+                            <div
+                                className="post-image-wrapper"
+                                onClick={() =>
+                                    setSelectedPost(img)
+                                }
+                            >
 
                                 <img
-                                    src={blog.thumbnail}
+                                    src={img.imageUrl}
                                     alt=""
+                                    className="post-image"
                                 />
+
+                            </div>
+
+                            {/* DESCRIPTION */}
+
+                            <div className="post-content">
+
+                                <p className="post-description">
+
+                                    {img.description}
+
+                                </p>
 
                             </div>
 
@@ -140,6 +117,113 @@ function Gallery() {
                 }
 
             </div>
+
+            {/* MODAL */}
+
+            {
+
+                selectedPost && (
+
+                    <div
+                        className="medium-modal-overlay"
+                        onClick={() =>
+                            setSelectedPost(null)
+                        }
+                    >
+
+                        <div
+                            className="medium-modal"
+                            onClick={(e) =>
+                                e.stopPropagation()
+                            }
+                        >
+
+                            {/* TOP */}
+
+                            <div className="medium-top">
+
+                                <div className="medium-user">
+
+                                    <div className="medium-avatar">
+
+                                        {
+                                            selectedPost.uploadedBy
+                                                ?.charAt(0)
+                                                ?.toUpperCase()
+                                        }
+
+                                    </div>
+
+                                    <div>
+
+                                        <h3>
+
+                                            {
+                                                selectedPost.uploadedBy
+                                            }
+
+                                        </h3>
+
+                                        <p>
+
+                                            Sai EduTech
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <button
+                                    className="close-modal"
+                                    onClick={() =>
+                                        setSelectedPost(null)
+                                    }
+                                >
+
+                                    ✕
+
+                                </button>
+
+                            </div>
+
+                            {/* IMAGE */}
+
+                            <img
+                                src={selectedPost.imageUrl}
+                                alt=""
+                                className="medium-modal-image"
+                            />
+
+                            {/* CONTENT */}
+
+                            <div className="medium-content">
+
+                                <h1>
+
+                                    {
+                                        selectedPost.originalName
+                                    }
+
+                                </h1>
+
+                                <p>
+
+                                    {
+                                        selectedPost.description
+                                    }
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                )
+
+            }
 
         </div>
 
