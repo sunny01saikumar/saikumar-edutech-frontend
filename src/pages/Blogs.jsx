@@ -5,10 +5,14 @@ import {
     FaArrowRight
 } from "react-icons/fa";
 
+import { useNavigate } from "react-router-dom";
+
 function Blogs() {
 
     const [blogs, setBlogs] =
         useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -54,15 +58,14 @@ function Blogs() {
 
                 {
 
-                    blogs.map((blog, index) => (
+                    blogs.map((blog) => (
 
                         <div
-                            key={index}
+                            key={blog.id}
                             className="blog-card"
                             onClick={() =>
-                                window.open(
-                                    blog.link,
-                                    "_blank"
+                                navigate(
+                                    `/blog/${blog.slug}`
                                 )
                             }
                         >
@@ -78,7 +81,9 @@ function Blogs() {
                                     <div>
 
                                         <h4>
-                                            Saikumar
+                                            {
+                                                blog.authorName
+                                            }
                                         </h4>
 
                                         <span>
@@ -98,7 +103,7 @@ function Blogs() {
                                 <p className="blog-description">
 
                                     {
-                                        blog.description
+                                        blog.summary
                                     }
 
                                 </p>
@@ -106,9 +111,13 @@ function Blogs() {
                                 <div className="blog-footer">
 
                                     <span>
+
                                         {
-                                            blog.publishedDate
+                                            new Date(
+                                                blog.createdAt
+                                            ).toLocaleDateString()
                                         }
+
                                     </span>
 
                                     <div className="blog-actions">
@@ -127,12 +136,17 @@ function Blogs() {
 
                                 <img
                                     src={
-                                        blog.image &&
-                                        blog.image !== ""
-                                            ? blog.image
-                                            : "https://placehold.co/600x400?text=Sai+EduTech"
+                                        blog.thumbnail &&
+                                        blog.thumbnail !== ""
+                                            ? blog.thumbnail
+                                            : "/default-blog.jpg"
                                     }
-                                    alt=""
+                                    onError={(e) => {
+
+                                        e.target.src =
+                                            "/default-blog.jpg";
+                                    }}
+                                    alt={blog.title}
                                     className="blog-image"
                                 />
 
