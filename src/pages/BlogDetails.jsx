@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+
 import { useParams } from "react-router-dom";
+
 import API from "../api/axios";
 
 function BlogDetails() {
 
     const { slug } = useParams();
 
-    const [blog, setBlog] =
-        useState(null);
+    const [blog, setBlog] = useState(null);
 
     useEffect(() => {
 
@@ -20,14 +21,16 @@ function BlogDetails() {
         try {
 
             const response =
-                await API.get(`/blogs/${slug}`);
+                await API.get(
+                    `/blogs/${slug}`
+                );
 
             setBlog(response.data);
 
-        }
-        catch (error) {
+        } catch (error) {
 
             console.log(error);
+
         }
     };
 
@@ -40,40 +43,57 @@ function BlogDetails() {
 
         <div className="blog-details-page">
 
-            <img
-                src={blog.thumbnail}
-                alt={blog.title}
-                className="details-image"
-            />
+            <div className="blog-details-container">
 
-            <h1 className="details-title">
-                {blog.title}
-            </h1>
+                <h1 className="blog-title">
 
-            <div className="details-meta">
+                    {blog.title}
 
-                <span>
-                    By {blog.authorName}
-                </span>
+                </h1>
 
-                <span>
-                    {
-                        new Date(
-                            blog.createdAt
-                        ).toLocaleDateString()
-                    }
-                </span>
+                <div className="blog-author-row">
+
+                    <div className="blog-avatar">
+
+                        S
+
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Saikumar
+                        </h4>
+
+                        <p>
+                            {
+                                new Date(
+                                    blog.createdAt
+                                ).toDateString()
+                            }
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <img
+                    src={blog.thumbnail}
+                    alt=""
+                    className="blog-thumbnail"
+                />
+
+                <div
+                    className="blog-content"
+                    dangerouslySetInnerHTML={{
+                        __html: blog.content
+                    }}
+                />
 
             </div>
 
-            <div
-                className="blog-content"
-                dangerouslySetInnerHTML={{
-                    __html: blog.content
-                }}
-            />
-
         </div>
+
     );
 }
 

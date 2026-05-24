@@ -1,27 +1,29 @@
 import { useEffect, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
 import API from "../api/axios";
 
 function Gallery() {
 
-    const [images, setImages] = useState([]);
+    const [blogs, setBlogs] = useState([]);
 
-    const [selectedImage, setSelectedImage] =
-        useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
 
-        fetchImages();
+        fetchBlogs();
 
     }, []);
 
-    const fetchImages = async () => {
+    const fetchBlogs = async () => {
 
         try {
 
             const response =
-                await API.get("/images");
+                await API.get("/blogs");
 
-            setImages(response.data);
+            setBlogs(response.data);
 
         } catch (error) {
 
@@ -32,138 +34,112 @@ function Gallery() {
 
     return (
 
-        <div className="feed-page">
+        <div className="medium-feed-page">
 
-            {/* FEED HEADER */}
+            <div className="medium-feed-container">
 
-            <div className="feed-header">
+                <div className="medium-profile-header">
 
-                <h1 className="feed-title">
-                    Sai EduTech Feed
-                </h1>
+                    <h1>
+                        Saikumar
+                    </h1>
 
-                <p className="feed-subtitle">
-                    Learn • Share • Explore
-                </p>
+                    <div className="medium-tabs">
 
-            </div>
+                        <span className="active-tab">
+                            Home
+                        </span>
 
-            {/* POSTS */}
+                        <span>
+                            Blogs
+                        </span>
 
-            <div className="feed-container">
+                        <span>
+                            About
+                        </span>
+
+                    </div>
+
+                </div>
 
                 {
 
-                    images.length > 0 ?
+                    blogs.map((blog) => (
 
-                        images.map((img) => (
+                        <div
+                            key={blog.id}
+                            className="medium-post-card"
+                            onClick={() =>
+                                navigate(
+                                    `/blog/${blog.slug}`
+                                )
+                            }
+                        >
 
-                            <div
-                                key={img.id}
-                                className="post-card"
-                            >
+                            <div className="medium-post-left">
 
-                                {/* TOP USER INFO */}
+                                <div className="medium-author">
 
-                                <div className="post-header">
+                                    <div className="medium-avatar">
 
-                                    <div className="user-avatar">
+                                        S
+
+                                    </div>
+
+                                    <span>
+
+                                        Saikumar
+
+                                    </span>
+
+                                    <span className="dot">
+
+                                        •
+
+                                    </span>
+
+                                    <span>
 
                                         {
-                                            img.uploadedBy
-                                                ?.charAt(0)
-                                                ?.toUpperCase()
+                                            new Date(
+                                                blog.createdAt
+                                            ).toDateString()
                                         }
 
-                                    </div>
-
-                                    <div>
-
-                                        <h3 className="username">
-                                            {img.uploadedBy}
-                                        </h3>
-
-                                        <p className="post-time">
-                                            Sai EduTech
-                                        </p>
-
-                                    </div>
+                                    </span>
 
                                 </div>
 
-                                {/* IMAGE */}
+                                <h2 className="medium-post-title">
 
-                                <div
-                                    className="post-image-wrapper"
-                                    onClick={() =>
-                                        setSelectedImage(
-                                            img.imageUrl
-                                        )
-                                    }
-                                >
+                                    {blog.title}
 
-                                    <img
-                                        src={img.imageUrl}
-                                        alt={img.originalName}
-                                        className="post-image"
-                                    />
+                                </h2>
 
-                                </div>
+                                <p className="medium-post-summary">
 
-                                {/* CONTENT */}
+                                    {blog.summary}
 
-                                <div className="post-content">
-
-                                    <p className="post-description">
-
-                                        {img.description}
-
-                                    </p>
-
-                                </div>
+                                </p>
 
                             </div>
 
-                        ))
+                            <div className="medium-post-right">
 
-                        :
+                                <img
+                                    src={blog.thumbnail}
+                                    alt=""
+                                />
 
-                        <div className="empty-feed">
-
-                            <h2>
-                                No Posts Yet
-                            </h2>
+                            </div>
 
                         </div>
+
+                    ))
 
                 }
 
             </div>
-
-            {/* IMAGE MODAL */}
-
-            {
-
-                selectedImage && (
-
-                    <div
-                        className="image-modal"
-                        onClick={() =>
-                            setSelectedImage(null)
-                        }
-                    >
-
-                        <img
-                            src={selectedImage}
-                            alt=""
-                            className="modal-image"
-                        />
-
-                    </div>
-
-                )
-
-            }
 
         </div>
 
