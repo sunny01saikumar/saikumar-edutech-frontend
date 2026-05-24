@@ -46,9 +46,25 @@ function BlogDetails() {
                 className="details-image"
             />
 
-            <h1>
+            <h1 className="details-title">
                 {blog.title}
             </h1>
+
+            <div className="details-meta">
+
+                <span>
+                    By {blog.authorName}
+                </span>
+
+                <span>
+                    {
+                        new Date(
+                            blog.createdAt
+                        ).toLocaleDateString()
+                    }
+                </span>
+
+            </div>
 
             <div
                 className="blog-content"

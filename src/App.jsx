@@ -18,6 +18,7 @@ import Blogs from "./pages/Blogs";
 import Dashboard from "./pages/Dashboard";
 
 import Layout from "./components/Layout";
+import BlogDetails from "./pages/BlogDetails";
 
 function App() {
 
@@ -69,6 +70,11 @@ function App() {
                         path="/blogs"
                         element={<Blogs />}
                     />
+
+                    <Route
+    path="/blog/:slug"
+    element={<BlogDetails />}
+/>
 
                 </Route>
 
