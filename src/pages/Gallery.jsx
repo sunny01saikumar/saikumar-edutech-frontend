@@ -246,13 +246,23 @@ function Gallery() {
 
                                 </h1>
 
-                                <p className="modal-description">
+                                <div className="modal-description">
 
-                                    {
-                                        selectedPost.description
-                                    }
+    {
+        selectedPost.description
+            ?.split("\n")
+            .map((line, index) => (
 
-                                </p>
+                <p key={index}>
+
+                    {line}
+
+                </p>
+
+            ))
+    }
+
+</div>
 
                             </div>
 

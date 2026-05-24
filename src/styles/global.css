@@ -1807,10 +1807,14 @@ body{
 
 .modal-description{
 
-    font-size:26px;
+    font-size:24px;
     line-height:2;
-    color:#333;
-    white-space:pre-line;
+    color:#222;
+}
+
+.modal-description p{
+
+    margin-bottom:28px;
 }
 
 .empty-feed{
