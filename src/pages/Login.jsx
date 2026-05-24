@@ -163,7 +163,7 @@ function Login() {
     }}
 >
 
-    Don't have account?
+    {/* Don't have account?
 
     <span
 
@@ -181,7 +181,7 @@ function Login() {
 
         Create User
 
-    </span>
+    </span> */}
 
 </p>
 

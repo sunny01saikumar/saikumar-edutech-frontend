@@ -50,13 +50,13 @@ function Sidebar({ open, setOpen }) {
                     <span>Upload</span>
                 </NavLink>
 
-                <NavLink
+                {/* <NavLink
                     to="/blogs"
                     onClick={() => setOpen(false)}
                 >
                     <FaBookOpen />
                     <span>Blogs</span>
-                </NavLink>
+                </NavLink> */}
 
             </div>
 
