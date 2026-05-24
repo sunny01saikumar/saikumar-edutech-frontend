@@ -36,83 +36,117 @@ function Gallery() {
 
         <div className="feed-page">
 
-            {/* FEED */}
-
             <div className="feed-container">
 
                 {
 
-                    images.map((img) => (
+                    images.length > 0 ?
 
-                        <div
-                            key={img.id}
-                            className="post-card"
-                        >
-
-                            {/* USER */}
-
-                            <div className="post-header">
-
-                                <div className="user-avatar">
-
-                                    {
-                                        img.uploadedBy
-                                            ?.charAt(0)
-                                            ?.toUpperCase()
-                                    }
-
-                                </div>
-
-                                <div>
-
-                                    <h3 className="username">
-
-                                        {img.uploadedBy}
-
-                                    </h3>
-
-                                    <p className="post-time">
-
-                                        Sai EduTech
-
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            {/* IMAGE */}
+                        images.map((img) => (
 
                             <div
-                                className="post-image-wrapper"
+                                key={img.id}
+                                className="modern-post-card"
                                 onClick={() =>
                                     setSelectedPost(img)
                                 }
                             >
 
-                                <img
-                                    src={img.imageUrl}
-                                    alt=""
-                                    className="post-image"
-                                />
+                                {/* LEFT */}
+
+                                <div className="modern-post-content">
+
+                                    {/* USER */}
+
+                                    <div className="modern-user-row">
+
+                                        <div className="modern-avatar">
+
+                                            {
+                                                img.uploadedBy
+                                                    ?.charAt(0)
+                                                    ?.toUpperCase()
+                                            }
+
+                                        </div>
+
+                                        <div>
+
+                                            <h4>
+
+                                                {img.uploadedBy}
+
+                                            </h4>
+
+                                            <p>
+
+                                                Sai EduTech
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                    {/* TITLE */}
+
+                                    <h2 className="modern-title">
+
+                                        {
+                                            img.description
+                                                ?.split(" ")
+                                                ?.slice(0, 5)
+                                                ?.join(" ")
+                                        }
+
+                                        ...
+
+                                    </h2>
+
+                                    {/* SMALL DESCRIPTION */}
+
+                                    <p className="modern-description">
+
+                                        {
+                                            img.description
+                                                ?.split(" ")
+                                                ?.slice(0, 35)
+                                                ?.join(" ")
+                                        }
+
+                                        ...
+
+                                    </p>
+
+                                </div>
+
+                                {/* RIGHT IMAGE */}
+
+                                <div className="modern-image-wrapper">
+
+                                    <img
+                                        src={img.imageUrl}
+                                        alt=""
+                                        className="modern-image"
+                                    />
+
+                                </div>
 
                             </div>
 
-                            {/* DESCRIPTION */}
+                        ))
 
-                            <div className="post-content">
+                        :
 
-                                <p className="post-description">
+                        <div className="empty-feed">
 
-                                    {img.description}
+                            <h1>
 
-                                </p>
+                                No Posts Found
 
-                            </div>
+                            </h1>
 
                         </div>
-
-                    ))
 
                 }
 
@@ -138,7 +172,7 @@ function Gallery() {
                             }
                         >
 
-                            {/* TOP */}
+                            {/* HEADER */}
 
                             <div className="medium-top">
 
@@ -199,15 +233,20 @@ function Gallery() {
 
                             <div className="medium-content">
 
-                                <h1>
+                                <h1 className="modal-title">
 
                                     {
-                                        selectedPost.originalName
+                                        selectedPost.description
+                                            ?.split(" ")
+                                            ?.slice(0, 8)
+                                            ?.join(" ")
                                     }
+
+                                    ...
 
                                 </h1>
 
-                                <p>
+                                <p className="modal-description">
 
                                     {
                                         selectedPost.description
